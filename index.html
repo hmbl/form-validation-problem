@@ -1,130 +1,138 @@
 <!DOCTYPE html>
 <html>
+
 <head>
-    <meta charset="UTF-8"/>
-    <title>Form validation problem</title>
-    <style>
-        /*
-            -------------------------------------------------------------------
-            Page prettiness
-            -------------------------------------------------------------------
+  <meta charset="UTF-8" />
+  <title>Form validation problem</title>
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+
+  <style>
+    /*
+      -------------------------------------------------------------------
+      Page prettiness
+      -------------------------------------------------------------------
         */
-        body {
-            font-family: sans-serif;
-            line-height: 1.5;
-            color: #333;
-            background: #ddd;
-            margin: 2em;
-        }
 
-        h1, h3 {
-            color: #576774;
-        }
+    body {
+      font-family: sans-serif;
+      line-height: 1.5;
+      color: #333;
+      background: #ddd;
+      margin: 2em;
+    }
 
-        h1:first-child {
-            margin-top: 0;
-        }
+    h1,
+    h3 {
+      color: #576774;
+    }
 
-        /*
-            -------------------------------------------------------------------
-            Form styles
-            -------------------------------------------------------------------
+    h1:first-child {
+      margin-top: 0;
+    }
+
+    /*
+      -------------------------------------------------------------------
+      Form styles
+      -------------------------------------------------------------------
         */
-        form {
-            background: #fff;
-            padding: 1em 1.25em;
-            border: solid 1px #ccc;
-            border-radius: .25em;
-        }
 
-        label {
-            vertical-align: middle;
-        }
-        /*
-            Note: Don't change font-family on password inputs,
-            unless you want tiny •••• bullets :)
+    form {
+      background: #fff;
+      padding: 1em 1.25em;
+      border: solid 1px #ccc;
+      border-radius: .25em;
+    }
+
+    label {
+      vertical-align: middle;
+    }
+
+    /*
+      Note: Don't change font-family on password inputs,
+      unless you want tiny •••• bullets :)
         */
-        input[type='text'],
-        input[type='submit'] {
-            font-family: sans-serif;
-        }
 
-        input[type='text'],
-        input[type='password'],
-        input[type='submit'],
-        select {
-            font-size: 1em;
-            border-radius: .25em;
-            -webkit-appearance: none;
-        }
+    input[type='text'],
+    input[type='submit'] {
+      font-family: sans-serif;
+    }
 
-        input[type='text'],
-        input[type='password'] {
-            border: solid 1px #ddd;
-            padding: .5em .5em;
-            color: #555;
-            width: 16em;
-        }
+    input[type='text'],
+    input[type='password'],
+    input[type='submit'],
+    select {
+      font-size: 1em;
+      border-radius: .25em;
+      -webkit-appearance: none;
+    }
 
-        input[type='submit'] {
-            border: solid 1px transparent;
-            background: #0B77DB;
-            color: #fff;
-            font-size: .875em;
-            padding: .75em 1em;
-            cursor: pointer;
-        }
+    input[type='text'],
+    input[type='password'] {
+      border: solid 1px #ddd;
+      padding: .5em .5em;
+      color: #555;
+      width: 16em;
+    }
 
-        input[type='submit']:hover {
-            background: #3C9AA7;
-        }
+    input[type='submit'] {
+      border: solid 1px transparent;
+      background: #0B77DB;
+      color: #fff;
+      font-size: .875em;
+      padding: .75em 1em;
+      cursor: pointer;
+    }
 
-        input[type='submit']:focus {
-            background: #3D6EAC;
-        }
+    input[type='submit']:hover {
+      background: #3C9AA7;
+    }
 
-
-
-
-        input[type='text']:focus,
-        input[type='password']:focus,
-        input[type='submit']:focus {
-            outline: none;
-            border-color: #0B77DB;
-            box-shadow: 0 0 6px rgba(48, 140, 255, 0.25);
-        }
-
-        input[type='submit']:active {
-            background: #333;
-            border-color: #333;
-        }
+    input[type='submit']:focus {
+      background: #3D6EAC;
+    }
 
 
 
 
-        label + input[type=checkbox] {
-            margin-left: 1em;
-        }
+    input[type='text']:focus,
+    input[type='password']:focus,
+    input[type='submit']:focus {
+      outline: none;
+      border-color: #0B77DB;
+      box-shadow: 0 0 6px rgba(48, 140, 255, 0.25);
+    }
 
-        select {
-            width: 17em;
-        }
+    input[type='submit']:active {
+      background: #333;
+      border-color: #333;
+    }
 
-        fieldset {
-            border: none;
-            padding: 0;
-        }
 
-        fieldset + fieldset {
-            border-top: solid 1px #eee;
-        }
 
-        .label {
-            width: 10em;
-            display: inline-block;
-        }
 
-        /*
+    label+input[type=checkbox] {
+      margin-left: 1em;
+    }
+
+    select {
+      width: 17em;
+    }
+
+    fieldset {
+      border: none;
+      padding: 0;
+    }
+
+    fieldset+fieldset {
+      border-top: solid 1px #eee;
+    }
+
+    .label {
+      width: 10em;
+      display: inline-block;
+    }
+
+    /*
             -------------------------------------------------------------------
             Error states
             -------------------------------------------------------------------
@@ -136,44 +144,56 @@
                 <input id='field' type='text' value='foo'>
             </p>
         */
-        .error > input,
-        .error > label {
-            color: red;
-        }
 
-        .error > input {
-            border-color: red;
-        }
+    .error>input,
+    .error>label {
+      color: red;
+    }
 
-    </style>
+    .error>input {
+      border-color: red;
+    }
+
+    .form-error {
+      color: red;
+      display: none;
+      font-size: .875rem;
+    }
+  </style>
+
+
 </head>
 
 <body>
-    <form method='post' action=''>
-        <h1>Fill out this awesome form</h1>
-        <fieldset>
-            <h3>Your details</h3>
-            <p>
-                <label class='label' for='email'>
+  <form method='post' action='' class="js-form">
+    <h1>Fill out this awesome form</h1>
+    <fieldset>
+      <h3>Your details</h3>
+      <p class="js-form-group">
+        <label class='label' for='email'>
                     Email
                 </label>
-                <input type='text' id='email' name='email'>
-            </p>
-            <p>
-                <label class='label' for='password'>
+        <input type='text' class="error js-input--email" id='email' name='email'>
+        <span class="form-error">Please enter a valid email address</span>
+
+      </p>
+
+      <p class="js-form-group">
+        <label class='label' for='password'>
                     Password
                 </label>
-                <input class='error' type='password' id='password' name='username'>
-            </p>
-        </fieldset>
+        <input class='error js-input--password' type='password' id='password' name='username'>
+        <span class="form-error">Please enter a password of atleast 8 characters </span>
+      </p>
+    </fieldset>
 
-        <fieldset>
-            <h3>Your animal</h3>
-            <p>
-                <label class='label' for='colour'>
+    <fieldset>
+      <h3>Your animal</h3>
+      <p class="js-form-group">
+        <label class='label' for='colour'>
                     Colour
                 </label>
-                <select name='colour' id='colour'>
+        <select name='colour' id='colour' class="js-input--colour">
                     <option value=''>Choose colour</option>
                     <option value='blue'>Blue</option>
                     <option value='green'>Green</option>
@@ -181,45 +201,134 @@
                     <option value='black'>Black</option>
                     <option value='brown'>Brown</option>
                 </select>
-            </p>
-            <p>
-                <span class="label">
+        <span class="form-error">Please select a colour </span>
+      </p>
+      <p class="js-form-group js-input--animal">
+        <span class="label">
                     Animal
                 </span>
 
-                <input type='checkbox' name='animal' value='bear' id='bear'>
-                <label for='bear'>
+        <input type='checkbox' class='js-input--animal-check' name='animal' value='bear' id='bear'>
+        <label for='bear'>
                      Bear
                 </label>
 
-                <input type='checkbox' name='animal' value='tiger' id='tiger'>
-                <label for='tiger'>
+        <input type='checkbox' class='js-input--animal-check js--check-tiger' name='animal' value='tiger' id='tiger'>
+        <label for='tiger'>
                     Tiger
                 </label>
 
-                <input type='checkbox' name='animal' value='snake' id='snake'>
-                <label for='snake'>
+        <input type='checkbox' class='js-input--animal-check' name='animal' value='snake' id='snake'>
+        <label for='snake'>
                      Snake
                 </label>
 
-                <input type='checkbox' name='animal' value='donkey' id='donkey'>
-                <label for='donkey'>
+        <input type='checkbox' class='js-input--animal-check' name='animal' value='donkey' id='donkey'>
+        <label for='donkey'>
                      Donkey
                 </label>
 
-            </p>
-            <p>
-                <label class='label' for='tiger_type'>
+        <span class="form-error">Please select atleast two animals </span>
+      </p>
+      <p class="js-form-group">
+        <label class='label' for='tiger_type'>
                     Type of tiger
                 </label>
-                <input type='text' name='tiger_type' id='tiger_type'>
-            </p>
-        </fieldset>
-        <fieldset>
-            <p>
-                <input type='submit' value='Create account'>
-            </p>
-        </fieldset>
-    </form>
+        <input type='text' class="js-input--tiger" name='tiger_type' id='tiger_type'>
+        <span class="form-error">Please specify the tiger type </span>
+      </p>
+    </fieldset>
+    <fieldset>
+      <p>
+        <input type='submit' value='Create account'>
+      </p>
+    </fieldset>
+  </form>
 </body>
+<script>
+  /*
+              -------------------------------------------------------------------
+              Javascript
+              -------------------------------------------------------------------
+          */
+  function validateEmail(email) {
+    var re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+    return re.test(String(email).toLowerCase());
+  }
+
+  var errors = 0;
+  console.log('work')
+  $(".js-form").on('submit', function(e) {
+    //    find errors, go through for each type of input
+    $('.error').each(function() {
+      $(this).removeClass('error')
+      $(this).find('.form-error').slideUp()
+    })
+
+    errors = 0;
+
+    $('.js-input--email').each(function() {
+      var email = $(this).val()
+
+      if (!validateEmail(email)) {
+        errors = errors + 1;
+        $(this).closest('.js-form-group').addClass('error')
+      }
+
+    })
+
+    $('.js-input--password').each(function() {
+      var pass = $(this).val()
+
+      if (pass.length < 8) {
+        errors = errors + 1;
+        $(this).closest('.js-form-group').addClass('error')
+      }
+
+    })
+
+    $('.js-input--colour').each(function() {
+      var colour = $(this).val()
+      if (colour == "") {
+        errors = errors + 1;
+        $(this).closest('.js-form-group').addClass('error')
+      }
+
+    })
+
+    $('.js-input--animal').each(function() {
+      var count = 0
+
+      $('.js-input--animal-check').each(function() {
+        if ($(this).is(':checked')) {
+          count = count + 1;
+        }
+      })
+
+      if (count < 2) {
+        errors = errors + 1;
+        $(this).closest('.js-form-group').addClass('error')
+      }
+
+    })
+
+    $('.js-input--tiger').each(function() {
+      var tigerType = $(this).val();
+
+      if ($('.js--check-tiger').is(':checked') && tigerType.length == 0) {
+        errors = errors + 1;
+        $(this).closest('.js-form-group').addClass('error')
+      }
+
+    })
+
+    if (errors != 0) {
+      e.preventDefault()
+      $('.error').each(function() {
+        $(this).find('.form-error').slideDown();
+      })
+    }
+  });
+</script>
+
 </html>
