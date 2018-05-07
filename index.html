@@ -249,24 +249,32 @@
           var re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
           return re.test(String(email).toLowerCase());
       }
-
+        
+      function addErrorClass(input){
+          input.closest('.js-form-group').addClass('error')
+      }
+        
       var errors = 0;
 
       $(".js-form").on('submit',function(e){
-      //    find errors, go through for each type of input
+          
+        // on form submit, remove all error classes
         $('.error').each(function(){
           $(this).removeClass('error')
           $(this).find('.form-error').slideUp()
         })
 
         errors = 0;
-
+          
+        // for each type of input, check against requirements
         $('.js-input--email').each( function(){
           var email = $(this).val()
-
+          
           if( !validateEmail( email ) ){
-            errors = errors + 1;
-            $(this).closest('.js-form-group').addClass('error')
+            
+            // if requirements are invalid, add to tally, add an error class
+            errors = errors + 1
+            addErrorClass($(this))
           }
 
         })
@@ -275,8 +283,8 @@
           var pass = $(this).val()
 
           if( pass.length < 8){
-            errors = errors + 1;
-            $(this).closest('.js-form-group').addClass('error')
+            errors = errors + 1
+            addErrorClass($(this))
           }
 
         })
@@ -284,8 +292,8 @@
         $('.js-input--colour').each(function(){
           var colour = $(this).val()
           if( colour == "" ){
-            errors = errors + 1;
-            $(this).closest('.js-form-group').addClass('error')
+            errors = errors + 1
+            addErrorClass($(this))
           }
 
         })
@@ -300,8 +308,8 @@
           })
 
           if(count < 2){
-            errors = errors + 1;
-            $(this).closest('.js-form-group').addClass('error')
+            errors = errors + 1
+            addErrorClass($(this))
           }
 
         })
@@ -310,15 +318,17 @@
           var tigerType = $(this).val();
 
           if($('.js--check-tiger').is(':checked') && tigerType.length == 0){
-            errors = errors + 1;
-            $(this).closest('.js-form-group').addClass('error')
+            errors = errors + 1
+            addErrorClass($(this))
           }
 
         })
-
+            
+        // if errors are found  
         if (errors != 0){
          e.preventDefault()
           $('.error').each(function(){
+            // for each error, display a message
             $(this).find('.form-error').slideDown();
           })
         }
